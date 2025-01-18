@@ -1,98 +1,143 @@
-document.getElementById('rentalForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+let currentStep = 1;
 
-    // Get form values
-    const pickupLocation = document.getElementById('pickupLocation').value;
-    const dropoffLocation = document.getElementById('dropoffLocation').value;
-    const carType = document.getElementById('carType').value;
-    const days = parseInt(document.getElementById('days').value);
-    const km = parseInt(document.getElementById('km').value);
-    const pickupDate = document.getElementById('pickupDate').value;
-    const dropoffDate = document.getElementById('dropoffDate').value;
-    const paymentMode = document.getElementById('paymentMode').value;
-    const price = calculatePrice(carType, km, days);
-    const paymentDetails = paymentMode === 'cash' ? getCashDetails() : paymentMode === 'card' ? getCardDetails() : null;
+        // Step navigation logic
+        function navigate(direction) {
+            if (direction === 'next') {
+                currentStep++;
+            } else if (direction === 'prev') {
+                currentStep--;
+            }
+            updateStepVisibility();
+        }
 
-    // Form validation
-    if (!pickupLocation || !dropoffLocation || !carType || isNaN(days) || isNaN(km) || !pickupDate || !dropoffDate || !paymentMode) {
-        alert('Please fill all required fields');
-        return;
-    }
+        function updateStepVisibility() {
+            // Hide all steps
+            $('.form-step').addClass('d-none');
 
-    // Feedback
-    alert(`Car Rental Summary:
-    Pickup Location: ${pickupLocation}
-    Drop-off Location: ${dropoffLocation}
-    Car Type: ${carType}
-    Rental Duration: ${days} days
-    Kilometers: ${km}
-    Pickup Date: ${pickupDate}
-    Drop-off Date: ${dropoffDate}
-    Total Price: $${price}
-    Payment Mode: ${paymentMode === 'cash' ? `Cash, Amount: $${paymentDetails}` : `Card Type: ${paymentDetails.cardType}, Card Number: ${paymentDetails.cardNumber}`}
-    `);
+            // Show the current step
+            $('#step' + currentStep).removeClass('d-none');
 
-    // Show feedback to user
-    document.getElementById('feedback').classList.remove('d-none');
-});
+            // Enable/Disable buttons based on step
+            if (currentStep === 1) {
+                $('#prevButton').prop('disabled', true);
+                $('#nextButton').prop('disabled', false);
+            } else if (currentStep === 3) {
+                $('#nextButton').prop('disabled', true);
+                $('#submitButton').prop('disabled', false);
+            } else {
+                $('#prevButton').prop('disabled', false);
+                $('#nextButton').prop('disabled', false);
+            }
+        }
 
-document.getElementById('paymentMode').addEventListener('change', function(event) {
-    const paymentMode = event.target.value;
-    const cashDetailsDiv = document.getElementById('cashDetails');
-    const cardDetailsDiv = document.getElementById('cardDetails');
-    
-    if (paymentMode === 'cash') {
-        cashDetailsDiv.classList.remove('d-none');
-        cardDetailsDiv.classList.add('d-none');
-    } else if (paymentMode === 'card') {
-        cardDetailsDiv.classList.remove('d-none');
-        cashDetailsDiv.classList.add('d-none');
-    } else {
-        cashDetailsDiv.classList.add('d-none');
-        cardDetailsDiv.classList.add('d-none');
-    }
-});
+        // Initialize date pickers for pickup and drop-off dates
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'mm/dd/yyyy',
+                startDate: 'today',
+                autoclose: true
+            });
 
-function calculatePrice(carType, km, days) {
-    let basePricePerDay = 0;
-    let basePricePerKM = 0;
+            // Listen to changes in the pickup and dropoff locations
+            $('#pickupLocation, #dropoffLocation').change(function() {
+                calculatePrice();
+            });
 
-    // Set pricing based on car type
-    switch (carType) {
-        case 'sedan':
-            basePricePerDay = 30;
-            basePricePerKM = 0.15;
-            break;
-        case 'suv':
-            basePricePerDay = 50;
-            basePricePerKM = 0.25;
-            break;
-        case 'convertible':
-            basePricePerDay = 70;
-            basePricePerKM = 0.35;
-            break;
-    }
+            $('#km').change(function() {
+                calculatePrice();
+            });
 
-    // Calculate total price
-    const price = (basePricePerDay * days) + (basePricePerKM * km);
-    return price.toFixed(2);
-}
+            $('#paymentMode').change(function() {
+                togglePaymentFields();
+            });
 
-function getCashDetails() {
-    const cashAmount = document.getElementById('cashAmount').value;
-    return cashAmount;
-}
+            // Submit event handling
+            $('#rentalForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting traditionally
 
-function getCardDetails() {
-    const cardType = document.getElementById('cardType').value;
-    const cardNumber = document.getElementById('cardNumber').value;
-    return { cardType, cardNumber };
-}
+                // Simulate a successful submission
+                showFeedback(); // Display success message
+                resetForm(); // Reset the form
+            });
 
-// Initialize the datepicker
-$(document).ready(function() {
-    $('.datepicker').datepicker({
-        format: 'mm/dd/yyyy',
-        startDate: 'today',
-    });
-});
+            updateStepVisibility(); // Initialize step visibility
+        });
+
+        // Distance between cities (in km)
+        const cityDistances = {
+            "Pretoria": {
+                "Johannesburg": 60,
+                "Durban": 600,
+                "Cape Town": 1400
+            },
+            "Johannesburg": {
+                "Pretoria": 60,
+                "Durban": 570,
+                "Cape Town": 1300
+            },
+            "Durban": {
+                "Pretoria": 600,
+                "Johannesburg": 570,
+                "Cape Town": 1600
+            },
+            "Cape Town": {
+                "Pretoria": 1400,
+                "Johannesburg": 1300,
+                "Durban": 1600
+            }
+        };
+
+        // Calculate price based on selected locations and km
+        function calculatePrice() {
+            const pickup = $('#pickupLocation').val();
+            const dropoff = $('#dropoffLocation').val();
+
+            if (pickup === dropoff) {
+                alert('Pickup and drop-off locations must be different.');
+                return;
+            }
+
+            if (pickup && dropoff) {
+                const distance = cityDistances[pickup] && cityDistances[pickup][dropoff];
+                if (distance) {
+                    $('#km').val(distance); // Automatically set the km based on distance
+                    const pricePerKm = 2; // Price per kilometer
+                    const totalPrice = distance * pricePerKm;
+                    $('#price').val('$' + totalPrice.toFixed(2));
+                    $('#submitButton').prop('disabled', false); // Enable the submit button
+                }
+            }
+        }
+
+        // Toggle payment fields based on selected payment mode
+        function togglePaymentFields() {
+            const paymentMode = $('#paymentMode').val();
+            if (paymentMode === 'cash') {
+                $('#cashDetails').removeClass('d-none');
+                $('#cardDetails').addClass('d-none');
+            } else if (paymentMode === 'card') {
+                $('#cashDetails').addClass('d-none');
+                $('#cardDetails').removeClass('d-none');
+            }
+        }
+
+        // Show feedback after form submission
+        function showFeedback() {
+            const feedback = $('#feedback');
+            feedback.removeClass('d-none').addClass('show'); // Ensure it's visible
+            setTimeout(function () {
+                feedback.removeClass('show').addClass('d-none'); // Hide it after 5 seconds
+            }, 5000);
+        }
+
+
+        // Reset the form after submission
+        function resetForm() {
+            $('#rentalForm')[0].reset();
+            $('#price').val('');
+            $('#paymentMode').val('');
+            $('#km').val('');
+            $('#feedback').addClass('d-none');
+            currentStep = 1;
+            updateStepVisibility();
+        }

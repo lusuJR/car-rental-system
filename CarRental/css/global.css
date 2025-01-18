@@ -1,31 +1,124 @@
+/* Body Styling */
 body {
-    background-color: #f8f9fa;
-}
-
-h1 {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(120deg, #007bff, #00c6ff);
     color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
+/* Heading Styling */
+h1 {
+    color: #0f0e0e;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Container Styling */
 .container {
     max-width: 600px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease-in-out;
+    margin: 20px auto;
 }
 
+/* Form Styling */
 form {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 form .form-label {
     font-weight: bold;
+    color: #555;
 }
 
 .form-control {
-    border-radius: 5px;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
 }
 
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Button Styling */
 button {
     width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Feedback Styling */
+#feedback {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Form Step Navigation Buttons */
+.form-navigation button {
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
