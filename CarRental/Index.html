@@ -6,17 +6,16 @@
     <title>Car Rental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
-    <script src="js/custom.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1 class="text-center my-5">Car Rental Service</h1>
-        <form id="rentalForm">
+        <form id="rentalForm" novalidate>
             <!-- Step 1: Pickup, Drop-off & Car Type -->
             <div id="step1" class="form-step">
                 <div class="mb-3">
-                    <label for="pickupLocation" class="form-label">Pickup Location</label>
+                    <label for="pickupLocation" class="form-label" aria-label="Select Pickup Location">Pickup Location</label>
                     <select class="form-select" id="pickupLocation" required>
                         <option value="" disabled selected>Select Pickup Location</option>
                         <option value="Pretoria">Pretoria</option>
@@ -27,7 +26,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="dropoffLocation" class="form-label">Drop-off Location</label>
+                    <label for="dropoffLocation" class="form-label" aria-label="Select Drop-off Location">Drop-off Location</label>
                     <select class="form-select" id="dropoffLocation" required>
                         <option value="" disabled selected>Select Drop-off Location</option>
                         <option value="Pretoria">Pretoria</option>
@@ -38,7 +37,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="carType" class="form-label">Car Type</label>
+                    <label for="carType" class="form-label" aria-label="Select Car Type">Car Type</label>
                     <select class="form-select" id="carType" required>
                         <option value="" disabled selected>Select Car Type</option>
                         <option value="sedan">Sedan</option>
@@ -51,22 +50,22 @@
             <!-- Step 2: Rental Duration, Dates, and Price Calculation -->
             <div id="step2" class="form-step d-none">
                 <div class="mb-3">
-                    <label for="km" class="form-label">Total Kilometers</label>
+                    <label for="km" class="form-label" aria-label="Total Kilometers">Total Kilometers</label>
                     <input type="number" class="form-control" id="km" min="1" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="pickupDate" class="form-label">Pickup Date</label>
+                    <label for="pickupDate" class="form-label" aria-label="Pickup Date">Pickup Date</label>
                     <input type="text" class="form-control datepicker" id="pickupDate" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="dropoffDate" class="form-label">Drop-off Date</label>
+                    <label for="dropoffDate" class="form-label" aria-label="Drop-off Date">Drop-off Date</label>
                     <input type="text" class="form-control datepicker" id="dropoffDate" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
+                    <label for="price" class="form-label" aria-label="Price">Price</label>
                     <input type="text" class="form-control" id="price" disabled>
                 </div>
             </div>
@@ -74,7 +73,7 @@
             <!-- Step 3: Payment Mode, Cash/Card Details -->
             <div id="step3" class="form-step d-none">
                 <div class="mb-3">
-                    <label for="paymentMode" class="form-label">Mode of Payment</label>
+                    <label for="paymentMode" class="form-label" aria-label="Payment Mode">Mode of Payment</label>
                     <select class="form-select" id="paymentMode" required>
                         <option value="" disabled selected>Select Payment Mode</option>
                         <option value="cash">Cash</option>
@@ -85,7 +84,7 @@
                 <!-- Cash Payment -->
                 <div id="cashDetails" class="d-none">
                     <div class="mb-3">
-                        <label for="cashAmount" class="form-label">Amount (in USD)</label>
+                        <label for="cashAmount" class="form-label" aria-label="Cash Amount">Amount (in USD)</label>
                         <input type="number" class="form-control" id="cashAmount" min="1" required>
                     </div>
                 </div>
@@ -93,7 +92,7 @@
                 <!-- Card Details -->
                 <div id="cardDetails" class="d-none">
                     <div class="mb-3">
-                        <label for="cardType" class="form-label">Card Type</label>
+                        <label for="cardType" class="form-label" aria-label="Card Type">Card Type</label>
                         <select class="form-select" id="cardType" required>
                             <option value="" disabled selected>Select Card Type</option>
                             <option value="visa">Visa</option>
@@ -102,7 +101,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <label for="cardNumber" class="form-label" aria-label="Card Number">Card Number</label>
                         <input type="text" class="form-control" id="cardNumber" pattern="\d{16}" title="16-digit card number" required>
                     </div>
                 </div>
@@ -221,17 +220,21 @@
             }
         };
 
-        // Calculate the price based on the selected locations and km
+        // Calculate price based on selected locations and km
         function calculatePrice() {
             const pickup = $('#pickupLocation').val();
             const dropoff = $('#dropoffLocation').val();
-            const km = $('#km').val();
+
+            if (pickup === dropoff) {
+                alert('Pickup and drop-off locations must be different.');
+                return;
+            }
 
             if (pickup && dropoff) {
                 const distance = cityDistances[pickup] && cityDistances[pickup][dropoff];
                 if (distance) {
                     $('#km').val(distance); // Automatically set the km based on distance
-                    const pricePerKm = 2; // Example: price per kilometer
+                    const pricePerKm = 2; // Price per kilometer
                     const totalPrice = distance * pricePerKm;
                     $('#price').val('$' + totalPrice.toFixed(2));
                     $('#submitButton').prop('disabled', false); // Enable the submit button
@@ -253,11 +256,13 @@
 
         // Show feedback after form submission
         function showFeedback() {
-            $('#feedback').removeClass('d-none');
-            setTimeout(function() {
-                $('#feedback').addClass('d-none');
+            const feedback = $('#feedback');
+            feedback.removeClass('d-none').addClass('show'); // Ensure it's visible
+            setTimeout(function () {
+                feedback.removeClass('show').addClass('d-none'); // Hide it after 5 seconds
             }, 5000);
         }
+
 
         // Reset the form after submission
         function resetForm() {
