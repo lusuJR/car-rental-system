@@ -13,99 +13,107 @@
     <div class="container">
         <h1 class="text-center my-5">Car Rental Service</h1>
         <form id="rentalForm">
-            <!-- Pickup & Drop-off Locations -->
-            <div class="mb-3">
-                <label for="pickupLocation" class="form-label">Pickup Location</label>
-                <select class="form-select" id="pickupLocation" required>
-                    <option value="" disabled selected>Select Pickup Location</option>
-                    <option value="Pretoria">Pretoria</option>
-                    <option value="Johannesburg">Johannesburg</option>
-                    <option value="Durban">Durban</option>
-                    <option value="Cape Town">Cape Town</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="dropoffLocation" class="form-label">Drop-off Location</label>
-                <select class="form-select" id="dropoffLocation" required>
-                    <option value="" disabled selected>Select Drop-off Location</option>
-                    <option value="Pretoria">Pretoria</option>
-                    <option value="Johannesburg">Johannesburg</option>
-                    <option value="Durban">Durban</option>
-                    <option value="Cape Town">Cape Town</option>
-                </select>
-            </div>
-
-            <!-- Car Type -->
-            <div class="mb-3">
-                <label for="carType" class="form-label">Car Type</label>
-                <select class="form-select" id="carType" required>
-                    <option value="" disabled selected>Select Car Type</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="suv">SUV</option>
-                    <option value="convertible">Convertible</option>
-                </select>
-            </div>
-
-            <!-- Rental Duration -->
-            <div class="mb-3">
-                <label for="km" class="form-label">Total Kilometers</label>
-                <input type="number" class="form-control" id="km" min="1" required>
-            </div>
-
-            <!-- Pickup and Return Dates -->
-            <div class="mb-3">
-                <label for="pickupDate" class="form-label">Pickup Date</label>
-                <input type="text" class="form-control datepicker" id="pickupDate" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="dropoffDate" class="form-label">Drop-off Date</label>
-                <input type="text" class="form-control datepicker" id="dropoffDate" required>
-            </div>
-
-            <!-- Price -->
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" id="price" disabled>
-            </div>
-
-            <!-- Payment Mode -->
-            <div class="mb-3">
-                <label for="paymentMode" class="form-label">Mode of Payment</label>
-                <select class="form-select" id="paymentMode" required>
-                    <option value="" disabled selected>Select Payment Mode</option>
-                    <option value="cash">Cash</option>
-                    <option value="card">Card</option>
-                </select>
-            </div>
-
-            <!-- Cash Payment -->
-            <div id="cashDetails" class="d-none">
+            <!-- Step 1: Pickup, Drop-off & Car Type -->
+            <div id="step1" class="form-step">
                 <div class="mb-3">
-                    <label for="cashAmount" class="form-label">Amount (in USD)</label>
-                    <input type="number" class="form-control" id="cashAmount" min="1" required>
-                </div>
-            </div>
-
-            <!-- Card Details -->
-            <div id="cardDetails" class="d-none">
-                <div class="mb-3">
-                    <label for="cardType" class="form-label">Card Type</label>
-                    <select class="form-select" id="cardType" required>
-                        <option value="" disabled selected>Select Card Type</option>
-                        <option value="visa">Visa</option>
-                        <option value="mastercard">MasterCard</option>
+                    <label for="pickupLocation" class="form-label">Pickup Location</label>
+                    <select class="form-select" id="pickupLocation" required>
+                        <option value="" disabled selected>Select Pickup Location</option>
+                        <option value="Pretoria">Pretoria</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Cape Town">Cape Town</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <input type="text" class="form-control" id="cardNumber" pattern="\d{16}" title="16-digit card number" required>
+                    <label for="dropoffLocation" class="form-label">Drop-off Location</label>
+                    <select class="form-select" id="dropoffLocation" required>
+                        <option value="" disabled selected>Select Drop-off Location</option>
+                        <option value="Pretoria">Pretoria</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Cape Town">Cape Town</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="carType" class="form-label">Car Type</label>
+                    <select class="form-select" id="carType" required>
+                        <option value="" disabled selected>Select Car Type</option>
+                        <option value="sedan">Sedan</option>
+                        <option value="suv">SUV</option>
+                        <option value="convertible">Convertible</option>
+                    </select>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" id="submitButton" disabled>Rent Car</button>
+            <!-- Step 2: Rental Duration, Dates, and Price Calculation -->
+            <div id="step2" class="form-step d-none">
+                <div class="mb-3">
+                    <label for="km" class="form-label">Total Kilometers</label>
+                    <input type="number" class="form-control" id="km" min="1" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="pickupDate" class="form-label">Pickup Date</label>
+                    <input type="text" class="form-control datepicker" id="pickupDate" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dropoffDate" class="form-label">Drop-off Date</label>
+                    <input type="text" class="form-control datepicker" id="dropoffDate" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" class="form-control" id="price" disabled>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment Mode, Cash/Card Details -->
+            <div id="step3" class="form-step d-none">
+                <div class="mb-3">
+                    <label for="paymentMode" class="form-label">Mode of Payment</label>
+                    <select class="form-select" id="paymentMode" required>
+                        <option value="" disabled selected>Select Payment Mode</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                    </select>
+                </div>
+
+                <!-- Cash Payment -->
+                <div id="cashDetails" class="d-none">
+                    <div class="mb-3">
+                        <label for="cashAmount" class="form-label">Amount (in USD)</label>
+                        <input type="number" class="form-control" id="cashAmount" min="1" required>
+                    </div>
+                </div>
+
+                <!-- Card Details -->
+                <div id="cardDetails" class="d-none">
+                    <div class="mb-3">
+                        <label for="cardType" class="form-label">Card Type</label>
+                        <select class="form-select" id="cardType" required>
+                            <option value="" disabled selected>Select Card Type</option>
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">MasterCard</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" pattern="\d{16}" title="16-digit card number" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" id="prevButton" onclick="navigate('prev')" disabled>Previous</button>
+                <button type="button" class="btn btn-primary" id="nextButton" onclick="navigate('next')">Next</button>
+                <button type="submit" class="btn btn-primary" id="submitButton" disabled>Rent Car</button>
+            </div>
         </form>
 
         <!-- Feedback Message -->
@@ -124,6 +132,70 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
 
     <script>
+        let currentStep = 1;
+
+        // Step navigation logic
+        function navigate(direction) {
+            if (direction === 'next') {
+                currentStep++;
+            } else if (direction === 'prev') {
+                currentStep--;
+            }
+            updateStepVisibility();
+        }
+
+        function updateStepVisibility() {
+            // Hide all steps
+            $('.form-step').addClass('d-none');
+
+            // Show the current step
+            $('#step' + currentStep).removeClass('d-none');
+
+            // Enable/Disable buttons based on step
+            if (currentStep === 1) {
+                $('#prevButton').prop('disabled', true);
+                $('#nextButton').prop('disabled', false);
+            } else if (currentStep === 3) {
+                $('#nextButton').prop('disabled', true);
+                $('#submitButton').prop('disabled', false);
+            } else {
+                $('#prevButton').prop('disabled', false);
+                $('#nextButton').prop('disabled', false);
+            }
+        }
+
+        // Initialize date pickers for pickup and drop-off dates
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'mm/dd/yyyy',
+                startDate: 'today',
+                autoclose: true
+            });
+
+            // Listen to changes in the pickup and dropoff locations
+            $('#pickupLocation, #dropoffLocation').change(function() {
+                calculatePrice();
+            });
+
+            $('#km').change(function() {
+                calculatePrice();
+            });
+
+            $('#paymentMode').change(function() {
+                togglePaymentFields();
+            });
+
+            // Submit event handling
+            $('#rentalForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting traditionally
+
+                // Simulate a successful submission
+                showFeedback(); // Display success message
+            });
+
+            updateStepVisibility(); // Initialize step visibility
+        });
+
         // Distance between cities (in km)
         const cityDistances = {
             "Pretoria": {
@@ -148,34 +220,7 @@
             }
         };
 
-        // Initialize date pickers for pickup and drop-off dates
-        $(document).ready(function() {
-            // Initialize the datepicker on both pickupDate and dropoffDate fields
-            $('.datepicker').datepicker({
-                format: 'mm/dd/yyyy',
-                startDate: 'today',  // Disable past dates
-                autoclose: true      // Auto-close after selecting a date
-            });
-
-            // Listen to changes in the pickup and dropoff locations
-            $('#pickupLocation, #dropoffLocation').change(function() {
-                calculatePrice();
-            });
-
-            $('#km').change(function() {
-                calculatePrice();
-            });
-
-            $('#paymentMode').change(function() {
-                togglePaymentFields();
-            });
-
-            $('#rentalForm').on('submit', function(event) {
-                event.preventDefault();
-                showFeedback();
-            });
-        });
-
+        // Calculate the price based on the selected locations and km
         function calculatePrice() {
             const pickup = $('#pickupLocation').val();
             const dropoff = $('#dropoffLocation').val();
