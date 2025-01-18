@@ -124,11 +124,13 @@ let currentStep = 1;
         // Show feedback after form submission
         function showFeedback() {
             const feedback = $('#feedback');
-            feedback.removeClass('d-none').addClass('show'); // Ensure it's visible
+            console.log('Showing feedback'); // Debugging
+            feedback.removeClass('d-none').css('display', 'block'); // Ensure visibility
             setTimeout(function () {
-                feedback.removeClass('show').addClass('d-none'); // Hide it after 5 seconds
+                feedback.css('display', 'none'); // Hide after 5 seconds
             }, 5000);
         }
+        
 
 
         // Reset the form after submission
