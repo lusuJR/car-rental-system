@@ -191,6 +191,7 @@
 
                 // Simulate a successful submission
                 showFeedback(); // Display success message
+                resetForm(); // Reset the form
             });
 
             updateStepVisibility(); // Initialize step visibility
@@ -226,17 +227,19 @@
             const dropoff = $('#dropoffLocation').val();
             const km = $('#km').val();
 
-            if (pickup && dropoff && km) {
+            if (pickup && dropoff) {
                 const distance = cityDistances[pickup] && cityDistances[pickup][dropoff];
                 if (distance) {
+                    $('#km').val(distance); // Automatically set the km based on distance
                     const pricePerKm = 2; // Example: price per kilometer
-                    const price = distance * pricePerKm * km;
-                    $('#price').val('$' + price.toFixed(2));
+                    const totalPrice = distance * pricePerKm;
+                    $('#price').val('$' + totalPrice.toFixed(2));
                     $('#submitButton').prop('disabled', false); // Enable the submit button
                 }
             }
         }
 
+        // Toggle payment fields based on selected payment mode
         function togglePaymentFields() {
             const paymentMode = $('#paymentMode').val();
             if (paymentMode === 'cash') {
@@ -248,11 +251,23 @@
             }
         }
 
+        // Show feedback after form submission
         function showFeedback() {
             $('#feedback').removeClass('d-none');
             setTimeout(function() {
                 $('#feedback').addClass('d-none');
             }, 5000);
+        }
+
+        // Reset the form after submission
+        function resetForm() {
+            $('#rentalForm')[0].reset();
+            $('#price').val('');
+            $('#paymentMode').val('');
+            $('#km').val('');
+            $('#feedback').addClass('d-none');
+            currentStep = 1;
+            updateStepVisibility();
         }
     </script>
 </body>
