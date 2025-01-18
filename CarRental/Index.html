@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-5">Car Rental Service</h1>
+        <form id="rentalForm">
+            <!-- Pickup & Drop-off Locations -->
+            <div class="mb-3">
+                <label for="pickupLocation" class="form-label">Pickup Location</label>
+                <input type="text" class="form-control" id="pickupLocation" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="dropoffLocation" class="form-label">Drop-off Location</label>
+                <input type="text" class="form-control" id="dropoffLocation" required>
+            </div>
+
+            <!-- Car Type -->
+            <div class="mb-3">
+                <label for="carType" class="form-label">Car Type</label>
+                <select class="form-select" id="carType" required>
+                    <option value="" disabled selected>Select Car Type</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="suv">SUV</option>
+                    <option value="convertible">Convertible</option>
+                </select>
+            </div>
+
+            <!-- Rental Duration -->
+            <div class="mb-3">
+                <label for="days" class="form-label">Number of Days</label>
+                <input type="number" class="form-control" id="days" min="1" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="months" class="form-label">Number of Months</label>
+                <input type="number" class="form-control" id="months" min="1" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="year" class="form-label">Rental Year</label>
+                <input type="number" class="form-control" id="year" min="2023" required>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" class="form-control" id="price" disabled>
+            </div>
+
+            <!-- Payment Mode -->
+            <div class="mb-3">
+                <label for="paymentMode" class="form-label">Mode of Payment</label>
+                <select class="form-select" id="paymentMode" required>
+                    <option value="" disabled selected>Select Payment Mode</option>
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                </select>
+            </div>
+
+            <!-- Credit Card Details -->
+            <div id="cardDetails" class="d-none">
+                <div class="mb-3">
+                    <label for="cardType" class="form-label">Card Type</label>
+                    <select class="form-select" id="cardType">
+                        <option value="" disabled selected>Select Card Type</option>
+                        <option value="visa">Visa</option>
+                        <option value="mastercard">MasterCard</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber" placeholder="Enter Card Number" pattern="\d{16}" title="16-digit card number" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Rent Car</button>
+        </form>
+    </div>
+
+    <script src="customer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
